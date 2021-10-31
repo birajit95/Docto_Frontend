@@ -1,9 +1,13 @@
-
+import Application from "./Common/components/Application";
+import GlobalContext from "./Common/components/GlobalContext";
+import "./css/style.css"
 
 function App() {
   return (
     <>
-      <h1>Hello world</h1>
+    <GlobalContext>
+        <Application />
+    </GlobalContext>
     </>
   );
 }
