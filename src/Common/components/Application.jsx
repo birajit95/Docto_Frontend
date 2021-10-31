@@ -14,7 +14,7 @@ function Application() {
         <>
         <ThemeProvider theme={context.theme}>
             <BrowserRouter>
-                <NavBar />  
+                <NavBar />
                 <CustomRouter />
             </BrowserRouter>
         </ThemeProvider>
