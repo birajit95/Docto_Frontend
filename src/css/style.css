@@ -1,0 +1,58 @@
+
+h1,h2,h3,h4,h5,h6{
+    color: #333333
+}
+
+.nav-btn-style{
+    margin-left: 8rem ;
+}
+
+.navbar-bg{
+    background-color: #f1f5fd;
+    padding: 2rem;
+    position: relative;
+    z-index: 99;
+}
+.navbar-brand{
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+
+.btn-style:hover{
+    background-color: transparent;
+}
+
+.navbar li {
+    padding: 0 1rem;
+}
+.navbar li a{
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: relative;
+}
+
+.navbar li a:hover{
+    position: relative;
+    color:rgb(151, 136, 165) !important;
+    text-shadow: 0 0.2rem 0.3rem rgba(183,171,255,0.5);
+    transition: all 1s;
+}
+
+.btn-style {
+    margin-right: .2rem;
+    border-radius: 2rem;
+    color: #fff !important;
+    background-color: rgba(183,171,255,0.5);
+    text-transform: capitalize;
+}
+
+/* .login-card{
+    height: 400px;
+    width: 40%;
+    border: 1px solid black;
+    position: relative;
+
+} */
+
+
