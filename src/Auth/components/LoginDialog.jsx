@@ -5,6 +5,7 @@ import { urlConfig } from "../../Common/Basic_Settings/urls";
 import axios from 'axios';
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router";
+// import BackDrop from "../../Common/components/BackDrop";
 
 
 const useStyles = makeStyles(theme=>({
@@ -21,9 +22,6 @@ const LoginDialog = (props) => {
     const openStatus = props.status
     const closeDialog = props.closeDialog
     
-    const [isResponseError, setIsResponseError] = useState(false)
-    const [errorMessage, setErrorMessage] = useState("")
-
 
     const [data, setData] = useState({
         username:"",
@@ -39,6 +37,8 @@ const LoginDialog = (props) => {
     }
 
     const handleSubmit = async (e)=>{
+       context.setIsLoading(true)
+
        e.preventDefault()
     
     try{
@@ -58,18 +58,25 @@ const LoginDialog = (props) => {
     }
     catch (err){
         const { response } = err;
-        setIsResponseError(true)
+        
        if (response.status >= 500){
-        setErrorMessage("Internal Server Error!")
+        context.setAlertState({
+            open:true,
+            message:"Internal Server Error!",
+            alertType: "error"
+        })
        }
        else{
-        setErrorMessage(response.data.message)
+        context.setAlertState({
+            open:true,
+            message: response.data.message,
+            alertType: "error"
+        })
        }
-       setTimeout(()=>{
-        setErrorMessage("")
-        setIsResponseError(false)
-       }, 3000)
-
+      
+    }
+    finally{
+        context.setIsLoading(false)
     }
     
 
@@ -78,6 +85,7 @@ const LoginDialog = (props) => {
     return (
         <>
         <Box>
+        {/* <BackDrop /> */}
         <Dialog open={openStatus} onClose={closeDialog}>
             <DialogTitle>
                 <div className="text-center">
@@ -87,9 +95,7 @@ const LoginDialog = (props) => {
                 </div>
             </DialogTitle>
             <DialogContent>
-            <Box className={isResponseError?"text-center":classes.errorClass} border={1} p={2} borderColor='red'>
-                <Typography variant="caption" color="red">{errorMessage}</Typography>
-            </Box>
+           
                <form onSubmit={handleSubmit}>
                <TextField
                 required={true}
