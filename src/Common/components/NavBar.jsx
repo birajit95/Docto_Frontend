@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import LoginDialog from "../../Auth/components/LoginDialog";
 import LoggedInMenu from '../../Auth/components/LoggedInMenu';
 import { customContext } from './GlobalContext';
+import { useHistory } from "react-router";
 
 
 
@@ -29,6 +30,8 @@ function NavBar() {
     const classes = useStyles()
     const context = useContext(customContext)
 
+    const history = useHistory()
+
     const [loginDialogOpen, setLoginDialogOpen] = useState(false)
     const closeDialog = ()=>{
         setLoginDialogOpen(false);
@@ -40,9 +43,9 @@ function NavBar() {
             <Toolbar>
                 <Typography variant="h4" style={{flexGrow:1}}>DocTalk</Typography>
                 <div className={classes.nabButton}> 
-                    <Button color="inherit" component={NavLink} to="/">Home</Button>
-                    <Button color="inherit" component={NavLink} to="/about">About</Button>
-                    <Button color="inherit" component={NavLink} to="/contact">Contact</Button>
+                    <Button color="inherit" onClick={()=>{history.push('/')}}>Home</Button>
+                    <Button color="inherit" onClick={()=>{history.push('/about')}}>About</Button>
+                    <Button color="inherit" onClick={()=>{history.push('/contact')}}>Contact</Button>
                 </div>
                 {!context.isLoggedin?
                 (

@@ -19,9 +19,9 @@ const GlobalContext = (props)=> {
     })
     
     useEffect(()=>{
-        // react-hooks/exhaustive-deps
         const access_token = localStorage.getItem("accessToken")
         access_token ? setIsLoggedin(true) : setIsLoggedin(false)
+        // eslint-disable-next-line
     }, [localStorage.getItem("accessToken")])
    
     return (

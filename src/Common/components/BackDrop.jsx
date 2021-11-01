@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import { Backdrop, Button, CircularProgress} from '@mui/material';
+import { Backdrop, CircularProgress} from '@mui/material';
 import { customContext } from './GlobalContext';
 
 const BackDrop = () => {

@@ -9,6 +9,8 @@ const LoggedInMenu = () => {
     const [menuAncEL, setmenuAncEL] = useState(null)
     const history = useHistory()
 
+    const username = localStorage.getItem('name')
+
     const openMenu = (e)=>{
         setIsOpen(true)
         setmenuAncEL(e.currentTarget)
@@ -35,7 +37,7 @@ const LoggedInMenu = () => {
     return (
         <>
          <Avatar
-            alt="Remy Sharp"
+            alt={username}
             src="https://picsum.photos/id/237/200/300"
             sx={{ width: 56, height: 56 }}
             onClick={openMenu}

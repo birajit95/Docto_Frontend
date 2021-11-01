@@ -1,24 +1,24 @@
-import { Dialog, DialogTitle, DialogContent, Paper, Typography, TextField, Button, Box } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, Typography, TextField, Button, Box } from "@mui/material";
 import React, {useContext, useState} from 'react';
 import { customContext } from "../../Common/components/GlobalContext";
 import { urlConfig } from "../../Common/Basic_Settings/urls";
 import axios from 'axios';
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router";
 // import BackDrop from "../../Common/components/BackDrop";
 
 
-const useStyles = makeStyles(theme=>({
-    errorClass:{
-        display: 'none!important'
-    }
-}))
+// const useStyles = makeStyles(theme=>({
+//     errorClass:{
+//         display: 'none!important'
+//     }
+// }))
 
 
 const LoginDialog = (props) => {
     const context = useContext(customContext)
     const history = useHistory()
-    const classes = useStyles()
+    // const classes = useStyles()
     const openStatus = props.status
     const closeDialog = props.closeDialog
     
