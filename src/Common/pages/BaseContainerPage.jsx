@@ -4,7 +4,7 @@ import {Box, Container} from '@mui/material';
 const BaseContainerPage = (props) => {
     return (
         <>
-         <Container maxWidth="xl" component={Box} p={2} mt={1}>
+         <Container maxWidth="xlg" component={Box} p={6} mt={0} >
             {props.children}
          </Container>
             

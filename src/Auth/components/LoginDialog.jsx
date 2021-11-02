@@ -58,14 +58,13 @@ const LoginDialog = (props) => {
     }
     catch (err){
         const { response } = err;
-        
-       if (response.status >= 500){
-        context.setAlertState({
-            open:true,
-            message:"Internal Server Error!",
-            alertType: "error"
-        })
-       }
+        if(response === undefined || response.status >= 500){
+            context.setAlertState({
+                open:true,
+                message:"Internal Server Error!",
+                alertType: "error"
+            })
+        }
        else{
         context.setAlertState({
             open:true,

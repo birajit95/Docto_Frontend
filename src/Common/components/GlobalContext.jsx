@@ -17,6 +17,7 @@ const GlobalContext = (props)=> {
         message: "",
         alertType: "info"
     })
+    // const [openDrawer, SetOpenDrawer] = useState(false);
     
     useEffect(()=>{
         const access_token = localStorage.getItem("accessToken")

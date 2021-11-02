@@ -4,7 +4,7 @@ import React, { useContext } from 'react'
 import { BrowserRouter } from 'react-router-dom';
 import {customContext} from './GlobalContext'
 import CustomRouter from "./CustomRouter";
-
+// import AppDrawer from "./AppDrawer";
 
 
 function Application() {
@@ -16,6 +16,7 @@ function Application() {
             <BrowserRouter>
                 <NavBar />
                 <CustomRouter />
+                {/* <AppDrawer /> */}
             </BrowserRouter>
         </ThemeProvider>
         </>
