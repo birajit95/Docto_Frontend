@@ -11,21 +11,39 @@ import { customContext } from './GlobalContext';
 
 export default function FormStepper(props) {
 
+  const {module, complted_step_numbers} = props.module
+  
   const state = props.state
+  const setCurrentStep = props.setCurrentStep
 
   const steps = state.steps
   const required_steps = state.required_steps
   
   const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+
+  let cmp_obj = {}
+
+  if(module !== 'registration'){
+    complted_step_numbers.map(i=>{
+        cmp_obj[i] = true
+    })
+  }
+  const [completed, setCompleted] = React.useState(cmp_obj);
+
+
   const [isSkip, setIsSkip] = React.useState(false)
   const context = React.useContext(customContext)
 
 
   React.useEffect(()=>{
       required_steps.includes(activeStep)?setIsSkip(false):setIsSkip(true)
-
+      setCurrentStep(activeStep)
+  
   },[activeStep])
+
+  const lastStep = ()=>{
+      return totalSteps() - 1;
+  }
 
   const totalSteps = () => {
     return steps.length;
@@ -91,17 +109,15 @@ export default function FormStepper(props) {
     }
   };
 
-  const handleComplete = () => {
-    console.log(isLastStep());
-    const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
+  const handleComplete = () => {    
+    let response = props.methods[activeStep]()     //here is the calling of functionalities
+    if(response){
+        const newCompleted = completed;
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+        handleNext();
+    }
+    
   };
 
   return (
@@ -122,10 +138,6 @@ export default function FormStepper(props) {
             <Typography sx={{ mt: 2, mb: 1 }}>
               All steps completed - you&apos;re finished
             </Typography>
-            {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box> */}
           </React.Fragment>
         ) : (
           <React.Fragment>
@@ -142,33 +154,36 @@ export default function FormStepper(props) {
               </Button>
               <Box sx={{ flex: '1 1 auto' }} />
              
-              {console.log(activeStep)}
               {
-
-              !isSkip?(
-                <Button onClick={handleSkip} sx={{ mr: 1 }} disabled
-                >
-                Skip
-              </Button>
-              ):
-              (
-                <Button onClick={handleSkip} sx={{ mr: 1 }} >
-                skip
-              </Button>
-              )
+              module === "registration"?(
+                !isSkip?(
+                    <Button onClick={handleSkip} sx={{ mr: 1 }} disabled
+                    >
+                    Skip
+                  </Button>
+                  ):
+                  (
+                    <Button onClick={handleSkip} sx={{ mr: 1 }} >
+                    skip
+                  </Button>
+                  )
+              ): null
 
               }
               
               {activeStep !== steps.length &&
-                (completed[activeStep] ? (
+                (completed[activeStep] && module === 'registration'? (
                   <Typography variant="caption" sx={{ display: 'inline-block' }}>
                     Step {activeStep + 1} already completed
                   </Typography>
                 ) : (
                   <Button onClick={handleComplete}>
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Finish'
-                      : 'Next'}
+                    {
+                    // completedSteps() === totalSteps() - 1
+                    //   ? 'Submit'
+                    //   : (module === 'registration'? 'Next':'Update')
+                      (module === 'registration'? 'Next':'Update')
+                      }
                   </Button>
                 ))}
             </Box>

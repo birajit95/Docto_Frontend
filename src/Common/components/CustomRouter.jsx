@@ -3,11 +3,11 @@ import Home from '../pages/Home';
 import About from '../pages/About';
 import Logout from '../../Auth/components/LogOut';
 import PatientRegister from '../../User/pages/PatientRegister';
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 
 
 function CustomRouter() {
-    const history = useHistory()
+    // const history = useHistory()
     return (
         <>
             <Switch>
