@@ -26,6 +26,8 @@ export default function FormStepper(props) {
   if(module !== 'registration'){
     complted_step_numbers.map(i=>{
         cmp_obj[i] = true
+        // return blank array to avoid warning
+        return []
     })
   }
   const [completed, setCompleted] = React.useState(cmp_obj);
@@ -38,12 +40,12 @@ export default function FormStepper(props) {
   React.useEffect(()=>{
       required_steps.includes(activeStep)?setIsSkip(false):setIsSkip(true)
       setCurrentStep(activeStep)
-  
+      // eslint-disable-next-line
   },[activeStep])
 
-  const lastStep = ()=>{
-      return totalSteps() - 1;
-  }
+  // const lastStep = ()=>{
+  //     return totalSteps() - 1;
+  // }
 
   const totalSteps = () => {
     return steps.length;
@@ -97,7 +99,7 @@ export default function FormStepper(props) {
   }
 
   const handleStep = (step) => () => {
-    if(calculteStep(step)){
+    if(calculteStep(step) && module === 'registration'){
         context.setAlertState({
             open:true,
             message:"Can not skip required step",
@@ -109,7 +111,8 @@ export default function FormStepper(props) {
     }
   };
 
-  const handleComplete = () => {    
+  const handleComplete = (e) => { 
+    e.preventDefault()   
     let response = props.methods[activeStep]()     //here is the calling of functionalities
     if(response){
         const newCompleted = completed;
@@ -125,13 +128,14 @@ export default function FormStepper(props) {
     <Box sx={{ width: '100%' }}>
       <Stepper nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
-          <Step key={label} completed={completed[index]}>
+          <Step key={String(Math.random()).split('.')[1]} completed={completed[index]}>
             <StepButton color="inherit" onClick={handleStep(index)}>
               {label}
             </StepButton>
           </Step>
         ))}
       </Stepper>
+      <form>
       <div>
         {allStepsCompleted() ? (
           <React.Fragment>
@@ -177,7 +181,7 @@ export default function FormStepper(props) {
                     Step {activeStep + 1} already completed
                   </Typography>
                 ) : (
-                  <Button onClick={handleComplete}>
+                  <Button onClick={handleComplete} type='submit'>
                     {
                     // completedSteps() === totalSteps() - 1
                     //   ? 'Submit'
@@ -190,6 +194,7 @@ export default function FormStepper(props) {
           </React.Fragment>
         )}
       </div>
+      </form>
     </Box>
     </BaseContainerPage>
   );

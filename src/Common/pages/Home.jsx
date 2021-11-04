@@ -28,7 +28,7 @@ function Home() {
                     {
                         cardData.map((item)=>{
                             return(
-                                <Grid item lg={6} md={6} sm={6}>
+                                <Grid item lg={6} md={6} sm={6} key={item.target}>
                                 <Card sx={{ maxWidth: 345 }} className="home-image">
                                 <CardMedia style={{objectFit:"contain"}}
                                     component="img"
