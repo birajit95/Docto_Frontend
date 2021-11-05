@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
 import FormStepper from '../../Common/components/FormStepper'
-import { Container, Box, TextField, Button, Paper, Grid, MenuItem, Select, FormControl, FilledInput, Typography } from '@mui/material'
+import { Container, Box, TextField, Button, Paper, Grid, MenuItem, Select, FormControl, FilledInput, Typography, FormHelperText } from '@mui/material'
 import { customContext } from '../../Common/components/GlobalContext'
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
+// import {Controler, useForm} from 'react-hook-form'
 import axios from 'axios'
 
 
@@ -26,39 +27,10 @@ const PatientRegister = () => {
 
     // methods to be called while submitting the steps
     const saveBasicInfo = ()=>{
-            let data = {...inputData}
-            let message = ''
-            let alertType = 'error'
-            let is_error = true
-            
-            if(data.firstname === ''){
-                message = 'First Name can not be empty'
-            }
-            else if(data.lastname === ''){
-                message = 'Last Name can not be empty'
-            }
-            else if(data.countryCode === ''){
-                message = 'Country code can not be empty'
-            }
-            else if(data.password !== data.confirmPassword){
-                message = 'Password does not match'
-            }
-            else if(data.password.length < 6){
-                message = 'Minimum length of password is 6'
-            }
-            else{
-                is_error = false
-                message = "Data saved successfully"
-                alertType = 'success'
-            }
+            const data = handleError(inputData)
+            console.log(data);
 
             
-            context.setAlertState({
-                open:true,
-                message: message,
-                alertType: alertType
-            })
-        
     }
     const saveAddress = ()=>{
         context.setAlertState({
@@ -108,6 +80,7 @@ const PatientRegister = () => {
         // eslint-disable-next-line
     }, [])
 
+
     const [date, setDate] = React.useState(null)
     const [inputData, setInputData] = React.useState({
         firstname:'',
@@ -119,33 +92,62 @@ const PatientRegister = () => {
         confirmPassword:''
     })
 
-    // const [error, setError] = React.useState({
-    //     firstname:{
-    //         status:false, errorText:""
-    //     },
-    //     lastname:{
-    //         status:false, errorText:""
-    //     },
-    //     dob:{
-    //         status:false, errorText:""
-    //     },
-    //     email:{
-    //         status:false, errorText:""
-    //     },
-    //     countryCode:{
-    //         status:false, errorText:""
-    //     },
-    //     mobile:{
-    //         status:false, errorText:""
-    //     },
-    //     password:{
-    //         status:false, errorText:""
-    //     },
-    //     confirmPassword:{
-    //         status:false, errorText:""
-    //     }
+    const [error, setError] = React.useState({
+        firstname:'',
+        lastname:'',
+        dob:'',
+        email:'',
+        countryCode:'',
+        mobile:'',
+        password:'',
+        confirmPassword:''
 
-    // })
+    })
+
+    const handleError = (data)=>{
+        let errorFileds = {}
+
+        if(data.firstname === ''){
+            errorFileds['firstname'] = 'Required*'
+        }
+        if(data.lastname === ''){
+            errorFileds['lastname'] = 'Required*'
+        }
+        if(data.countryCode === ''){
+            errorFileds['countryCode'] = 'Required*'
+        }
+        if(data.password !== data.confirmPassword){
+            errorFileds['password'] = 'Password does not match!'
+            errorFileds['confirmPassword'] = 'Password does not match!'
+
+        }
+        if(data.password.length < 6){
+            errorFileds['password'] = 'Password minimum length is 6'
+        }
+
+        if(data.mobile === ""){
+            errorFileds['mobile'] = 'Required*'
+        }
+
+        if(date === null){
+            errorFileds['dob'] = 'Required*'
+
+        }
+        if(data.email === ''){
+            errorFileds['email'] = 'Required*'
+
+        }
+
+        if(Object.keys(errorFileds).length > 0){
+            setError({...errorFileds})
+            return null
+        }
+        else{
+            let new_date = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`
+            const new_data = {...data, dob:new_date}
+            return new_data
+        }
+    }
 
     const handleInput = (e)=>{
         const input = e.target
@@ -185,9 +187,9 @@ const PatientRegister = () => {
                         label="First Name"
                         value={inputData.firstname}
                         onChange={handleInput}
-                        required
-                        // error={error.firstname.status}
-                        // helperText={error.firstname.errorText}
+                        error={Boolean(error.firstname)}
+                        helperText={error.firstname}
+                        onFocus={()=>{setError({...error, firstname:''})}}
                         />
 
                         </Grid>
@@ -197,23 +199,35 @@ const PatientRegister = () => {
                         label="Last Name"
                         value={inputData.lastname}
                         onChange={handleInput}
-                        required
-                      
+                        error={Boolean(error.lastname)}
+                        helperText={error.lastname}
+                        onFocus={()=>{setError({...error, lastname:''})}}
                         />
                         </Grid>
                     </Grid>
                    
                     <Grid container spacing={2}>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns} role>
                         <DatePicker
                             label="Date of Birth"
                             value={date}
                             onChange={(newDate)=>{setDate(newDate)}}
-                            renderInput={(params)=><TextField {...params} fullWidth variant="filled" margin='normal' />}
-                            required
+                            renderInput={
+                                (params)=><TextField {...params} 
+                                fullWidth variant="filled"
+                                margin='normal'
+                                error={Boolean(error.dob)}
+                                helperText={error.dob}
+                        onFocus = {()=>{setError({...error, dob:''})}}
+
+                        onClick = {()=>{setError({...error, dob:''})}}
+                                /> 
+                            }
+                            
                         />
                         </LocalizationProvider>
+                        
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
                         <TextField fullWidth variant="filled" margin='normal'
@@ -222,25 +236,31 @@ const PatientRegister = () => {
                         value={inputData.email}
                         onChange={handleInput}
                         autoComplete="off"
-                        required
+                        error={Boolean(error.email)}
+                        helperText={error.email}
+                        onFocus = {()=>{setError({...error, email:''})}}
                         />
                         </Grid>
                     </Grid>
                     <Grid container spacing={2}>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
                         <Select  input={<FilledInput />} component={TextField} style={{marginTop:15}} fullWidth
-                        name='countryCode' onChange={handleInput} required
+                        name='countryCode' onChange={handleInput}
                         label="Country Code"
                         displayEmpty
+                        error={Boolean(error.countryCode)}
+                        onFocus = {()=>{setError({...error, countryCode:''})}}
                         >
-                            <MenuItem disabled component={Typography} > Select Country Code</MenuItem>
-                            {countryCode.map(item=>{
-                                return(
-                                    <MenuItem key={String(item.dial_code) + String(Math.random()).split('.')[1]} value={item.dial_code}>{item.name} ({item.dial_code})</MenuItem>
-                                )
-                            })}
+                        <MenuItem disabled component={Typography} > Select Country Code</MenuItem>
+                        {countryCode.map(item=>{
+                            return(
+                                <MenuItem key={String(item.dial_code) + String(Math.random()).split('.')[1]} value={item.dial_code}>{item.name} ({item.dial_code})</MenuItem>
+                            )
+                        })}
 
                         </Select>
+                        <FormHelperText className='text-danger m-0'>{error.countryCode}</FormHelperText>
+                        
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
                         <TextField fullWidth variant="filled" margin='normal'
@@ -249,6 +269,9 @@ const PatientRegister = () => {
                         label="Mobile"
                         value={inputData.mobile}
                         onChange={handleInput}
+                        error={Boolean(error.mobile)}
+                        helperText={error.mobile}
+                        onFocus={()=>{setError({...error, mobile:''})}}
                         />
                         </Grid>
                     </Grid>
@@ -261,7 +284,9 @@ const PatientRegister = () => {
                         value={inputData.password}
                         onChange={handleInput}
                         autoComplete="off"
-                        required
+                        error={Boolean(error.password)}
+                        helperText={error.password}
+                        onFocus = {()=>{setError({...error, password:'', confirmPassword:''})}}
                         />
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -271,7 +296,9 @@ const PatientRegister = () => {
                         value={inputData.confirmPassword}
                         onChange={handleInput}
                         autoComplete="off"
-                        required
+                        error={Boolean(error.confirmPassword)}
+                        helperText={error.confirmPassword}
+                        onFocus = {()=>{setError({...error, password:'', confirmPassword:''})}}
                         />
                         </Grid>
                     </Grid>
