@@ -21,16 +21,16 @@ const PatientRegister = () => {
 
     // here we will pass the completed state indexes after fetching from api
     const module = {
-        module:'registrations',
+        module:'registration',
         complted_step_numbers:[]
     }
 
     // methods to be called while submitting the steps
     const saveBasicInfo = ()=>{
             const data = handleError(inputData)
-            console.log(data);
-
-            
+            if(data){
+                return true
+            }
     }
     const saveAddress = ()=>{
         context.setAlertState({

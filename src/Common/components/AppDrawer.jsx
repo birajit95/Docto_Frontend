@@ -60,9 +60,13 @@ export default function AppDrawer(props) {
       </List>
     </Box>
   );
+  
+              
 
   return (
     <>
+         {localStorage.getItem('accessToken')?
+         (
           <SwipeableDrawer
             anchor='left'
             open={drawerState}
@@ -73,6 +77,8 @@ export default function AppDrawer(props) {
             <Divider />
             {list('left')}
           </SwipeableDrawer>
+         ):null
+         }
     </>
   );
 }
